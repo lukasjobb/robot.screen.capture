@@ -1,0 +1,38 @@
+'Im trying to locate the "stall" using colors but I can't seem to find it. Can someone explain how to read this lines. I can't seem to find it anywhere but my idea
+is that x and y = where it start (at cordinate 200, 170) and creates a 700x500 square that it looks at my ive got no idea.'
+
+   // var x = 200, y = 170, width = 700, height = 500;
+    var img = robot.screen.capture(x, y, width, height);
+
+
+
+//Idea to find the stall.
+function findStall() {
+    var x = 200, y = 170, width = 700, height = 500;
+    var img = robot.screen.capture(x, y, width, height);
+
+  // Stall colors.
+    var stallColors = ["#8e7493", "#424254", "#51093d", "#393946", "#69094e"];
+
+//Searches for the pixels.
+    for(var i = 0; i < 1000; i++) {
+        var randomX = getRandomInt(0, width-1);
+        var randomY = getRandomInt(0, height-1);
+        var sampleColor = img.colorAt(randomX, randomY);
+
+        if(stallColors.includes(sampleColor)) {
+            var screenX = randomX + x;
+            var screenY = randomY + y;
+
+            if(confirmStall(screenX, screenY)) {
+            console.log("found stall: " + screenX + "," + screenY + " color " + sampleColor);
+            return {x: screenX, y: screenY}
+            } else {
+                console.log("uncomfirmed stall: " + screenX + "," + screenY + " color " + sampleColor);
+            }
+        }
+    }
+
+    // Didn't find the stall.
+    return false;
+}
